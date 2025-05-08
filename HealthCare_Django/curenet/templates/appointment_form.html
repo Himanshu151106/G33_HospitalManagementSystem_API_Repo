@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Book Appointment - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">Book an Appointment</h1>
+        {% if doctor %}
+            <p class="lead text-white">Schedule an appointment with Dr. {{ doctor.name }}</p>
+        {% else %}
+            <p class="lead">Schedule an appointment with one of our doctors</p>
+        {% endif %}
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Appointment Information</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.date|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {% if no_availability_message %}
+                                    <div class="alert alert-danger mt-2">
+                                        {{ no_availability_message }}
+                                    </div>
+                                {% else %}
+                                    {{ form.time|as_crispy_field }}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.reason|as_crispy_field }}
+                        </div>
+
+                        {% if not doctor %}
+                            <div class="alert alert-info mb-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                You're booking a general appointment. Our system will assign an appropriate doctor based on your reason for the appointment.
+                            </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary" {% if no_availability_message %}disabled{% endif %}>
+                            <i class="fas fa-calendar-check me-2"></i> Continue to Payment
+                        </button>
+                        <a href="{% if doctor %}{% url 'doctor_profile' doctor.id %}{% else %}{% url 'patient_dashboard' %}{% endif %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Back
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            {% if doctor %}
+                <div class="card mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="card-title mb-0">Doctor Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-user-md fa-4x text-primary"></i>
+                        </div>
+                        <h5 class="text-center">Dr. {{ doctor.name }}</h5>
+                        <p class="text-center mb-3">
+                            <span class="badge bg-primary">{{ doctor.specialty }}</span>
+                        </p>
+                        <p class="mb-1"><strong>Experience:</strong> {{ doctor.experience }} years</p>
+                        <p class="mb-1"><strong>Consultation Fee:</strong> ₹{{ doctor.fees }}</p>
+                        <p class="mb-3"><strong>Hospital:</strong> {{ doctor.hospital.name }}</p>
+                        <div class="d-grid">
+                            <a href="{% url 'doctor_profile' doctor.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-info-circle me-1"></i> View Full Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="card-title mb-0">Hospital Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ hospital.name }}</h5>
+                        <p class="mb-1">
+                            <i class="fas fa-map-marker-alt me-2 text-primary"></i> {{ hospital.address }}, {{ hospital.city }}, {{ hospital.state }}
+                        </p>
+                        <p>
+                            <i class="fas fa-money-bill-wave me-2 text-primary"></i> Fees Range: {{ hospital.fees_range }}
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Appointment Guidelines</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fas fa-clock me-2 text-primary"></i> Please arrive 15 minutes before your scheduled time.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-file-medical me-2 text-primary"></i> Bring any previous medical records if available.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-pills me-2 text-primary"></i> Bring a list of your current medications.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-credit-card me-2 text-primary"></i> Payment can be made through various methods.
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-calendar-times me-2 text-primary"></i> Cancellations must be made at least 4 hours before the appointment.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

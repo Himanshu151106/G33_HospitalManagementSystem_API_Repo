@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Doctor to {{ hospital.name }} - CureNet{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-light py-4">
+    <div class="container">
+        <h1 class="display-5">Add Doctor to {{ hospital.name }}</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'patient_dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'doctor_list' hospital.name %}">{{ hospital.name }} Doctors</a></li>
+                <li class="breadcrumb-item active">Add Doctor</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Doctor Details</h3>
+                    
+                    <div class="alert alert-info mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You are adding a new doctor to <strong>{{ hospital.name }}</strong>.
+                    </div>
+                    
+                    <form method="post" action="{% url 'add_doctor_for_hospital' hospital.id %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Doctor Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.specialty.id_for_label }}" class="form-label">Specialty</label>
+                            {{ form.specialty }}
+                            {% if form.specialty.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.specialty.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.experience.id_for_label }}" class="form-label">Years of Experience</label>
+                            {{ form.experience }}
+                            {% if form.experience.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.experience.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.fees.id_for_label }}" class="form-label">Consultation Fees (₹)</label>
+                            {{ form.fees }}
+                            {% if form.fees.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.fees.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Hospital field is hidden as we're adding to a specific hospital -->
+                        {{ form.hospital.as_hidden }}
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'doctor_list' hospital.name %}" class="btn btn-outline-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Add Doctor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

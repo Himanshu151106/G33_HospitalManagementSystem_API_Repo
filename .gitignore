@@ -1,0 +1,13 @@
+HealthCare_Flask/env
+
+
+# Python
+*.pyc
+__pycache__/
+# Django
+db.sqlite3
+/staticfiles/
+/media/
+
+# VS Code
+.vscode/

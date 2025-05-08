@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- View Cart Icon at the top -->
+<div class="d-flex justify-content-end mt-2 mr-4">
+    <a href="{% url 'view_cart' %}" class="btn btn-outline-success">
+        <i class="fas fa-shopping-cart"></i> View Cart
+    </a>
+</div>
+
+<h2 class="mb-4 text-center">Available Medicines</h2>
+
+<!-- Admin Section - Only visible to staff members -->
+{% if user.is_staff %}
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white">
+        {% if edit_id %}
+        <h3 class="mb-0">Edit Medicine</h3>
+        {% else %}
+        <h3 class="mb-0">Add New Medicine</h3>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{% url 'medicine_list' %}">
+            {% csrf_token %}
+            
+            {% if edit_id %}
+            <input type="hidden" name="medicine_id" value="{{ edit_id }}">
+            {% endif %}
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.name.id_for_label }}">Medicine Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                    <small class="text-danger">{{ form.name.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="{{ form.price.id_for_label }}">Price (₹)</label>
+                    {{ form.price }}
+                    {% if form.price.errors %}
+                    <small class="text-danger">{{ form.price.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="{{ form.stock.id_for_label }}">Stock Available</label>
+                    {{ form.stock }}
+                    {% if form.stock.errors %}
+                    <small class="text-danger">{{ form.stock.errors }}</small>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <small class="text-danger">{{ form.description.errors }}</small>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex justify-content-between mt-3">
+                {% if edit_id %}
+                <button type="submit" name="edit_medicine" class="btn btn-primary">Update Medicine</button>
+                <a href="{% url 'medicine_list' %}" class="btn btn-secondary">Cancel Edit</a>
+                {% else %}
+                <button type="submit" name="add_medicine" class="btn btn-success">Add Medicine</button>
+                <a href="{% url 'fetch_external_medicines' %}" class="btn btn-info">Fetch from DailyMed API</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<!-- Centered Search bar -->
+<div class="d-flex justify-content-center mb-4">
+    <form method="get" action="{% url 'medicine_list' %}" class="form-inline">
+        <div class="input-group">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search medicines..." class="form-control" style="width: 300px;">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+                {% if query %}
+                    <a href="{% url 'medicine_list' %}" class="btn btn-secondary">Clear</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Medicines list -->
+<div class="row justify-content-center">
+    {% for med in medicines %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm medicine-card" style="transition: transform 0.3s;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ med.name }}</h5>
+                    <p class="card-text">{{ med.description|truncatewords:20 }}</p>
+                    <p class="card-text"><strong>Price:</strong> ₹{{ med.price }}</p>
+                    <p class="card-text">
+                        <strong>Stock:</strong> 
+                        {% if med.stock > 0 %}
+                            {{ med.stock }} units
+                        {% else %}
+                            <span class="text-danger">Out of Stock</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if user.is_staff %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <a href="{% url 'medicine_list' %}?edit_id={{ med.id }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form method="POST" action="{% url 'delete_medicine' med.id %}" 
+                              onsubmit="return confirm('Are you sure you want to delete {{ med.name }}?')">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                    
+                    {% if med.stock > 0 %}
+                        <form method="POST" action="{% url 'add_to_cart' med.id %}">
+                            {% csrf_token %}
+                            <div class="d-flex align-items-center">
+                                <input type="number" name="quantity" min="1" max="{{ med.stock }}" value="1" class="form-control mr-2" style="width: 70px;">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <button class="btn btn-secondary w-100" disabled>Add to Cart</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No medicines found.</p>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Hover effect style -->
+<style>
+    .medicine-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+<!-- Include FontAwesome (if not already in your base.html) -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+{% endblock %}

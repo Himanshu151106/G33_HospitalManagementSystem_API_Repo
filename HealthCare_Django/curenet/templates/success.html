@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Successful - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">Booking Successful!</h1>
+        <p class="lead text-white">Your appointment has been confirmed</p>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    <h2 class="card-title">Thank You for Your Booking</h2>
+                    <p class="card-text mb-4">
+                        Your appointment has been successfully booked and confirmed. A confirmation email has been sent to your registered email address.
+                    </p>
+                    
+                    <div class="alert alert-info text-start mb-4">
+                        <h5 class="alert-heading">Important Information:</h5>
+                        <ul class="mb-0">
+                            <li>Please arrive 15 minutes before your scheduled appointment time.</li>
+                            <li>Bring any relevant medical records or test reports.</li>
+                            <li>Don't forget to bring your identification proof.</li>
+                            <li>If you need to cancel or reschedule, please do so at least 4 hours in advance.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'my_appointments' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-calendar-check me-2"></i> View My Appointments
+                        </a>
+                        <a href="{% url 'patient_dashboard' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-home me-2"></i> Go to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="card mb-5">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Appointment Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Appointment ID:</strong> #{{ appointment.id }}</p>
+                            <p><strong>Patient Name:</strong> {{ appointment.name }}</p>
+                            <p><strong>Phone:</strong> {{ appointment.phone }}</p>
+                            <p><strong>Date:</strong> {{ appointment.date|date:"F d, Y" }}</p>
+                            <p><strong>Time:</strong> {{ appointment.time|time:"h:i A" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Doctor:</strong> {% if appointment.doctor %}Dr. {{ appointment.doctor.name }}{% else %}To be assigned{% endif %}</p>
+                            <p><strong>Specialty:</strong> {% if appointment.doctor %}{{ appointment.doctor.specialty }}{% else %}N/A{% endif %}</p>
+                            <p><strong>Hospital:</strong> {% if appointment.hospital %}{{ appointment.hospital.name }}{% else %}To be assigned{% endif %}</p>
+                            <p><strong>Address:</strong> {% if appointment.hospital %}{{ appointment.hospital.address }}, {{ appointment.hospital.city }}, {{ appointment.hospital.state }}{% else %}To be confirmed{% endif %}</p>
+                            <p><strong>Payment Status:</strong> {% if appointment.is_paid %}<span class="badge bg-success">Paid</span>{% else %}<span class="badge bg-warning text-dark">Payment on Meeting</span>{% endif %}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-center">
+                    <a href="#" class="btn btn-sm btn-outline-secondary me-2" onclick="window.print()">
+                        <i class="fas fa-print me-1"></i> Print
+                    </a>
+                    <a href="#" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-download me-1"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

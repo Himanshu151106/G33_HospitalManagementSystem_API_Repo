@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">Contact Us</h1>
+        <p class="lead text-white">Get in touch with our team</p>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h2 class="mb-4">Send Us a Message</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                </div>
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" class="form-control" id="subject" placeholder="Enter subject">
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="5" placeholder="Enter your message"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h2 class="mb-4 ">Contact Information</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Our Office</h5>
+                    <p class="card-text">
+                        <i class="fas fa-map-marker-alt me-2 text-primary"></i> 123 Healthcare Avenue, Medical District, New Delhi, India
+                    </p>
+                    <p class="card-text">
+                        <i class="fas fa-phone me-2 text-primary"></i> +91 98765 43210
+                    </p>
+                    <p class="card-text">
+                        <i class="fas fa-envelope me-2 text-primary"></i> info@curenet.com
+                    </p>
+                    <p class="card-text">
+                        <i class="fas fa-clock me-2 text-primary"></i> Monday - Friday: 9:00 AM - 6:00 PM
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Connect With Us</h5>
+                    <p class="card-text">Follow us on social media for the latest updates and health tips.</p>
+                    <div class="social-links">
+                        <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-primary"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   
+    <section class="mb-5">
+        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        How do I book an appointment?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can book an appointment by logging into your account, browsing our list of doctors, and selecting a convenient time slot. Alternatively, you can call our helpline for assistance.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        How can I cancel or reschedule my appointment?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can cancel or reschedule your appointment by logging into your account and navigating to "My Appointments." Select the appointment you wish to modify and follow the instructions.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        What payment methods do you accept?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We accept various payment methods including credit/debit cards, PayPal, bank transfers, and cash payment at the time of your appointment.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        How secure is my medical information?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We take patient privacy very seriously. Your medical information is protected with industry-standard security measures and is only accessible to authorized healthcare providers involved in your care.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

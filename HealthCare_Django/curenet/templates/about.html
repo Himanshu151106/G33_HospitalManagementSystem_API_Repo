@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">About CureNet</h1>
+        <p class="lead text-white">Learn about our mission and values</p>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">Our Mission</h2>
+            <p>
+                At CureNet, our mission is to revolutionize healthcare management by providing a comprehensive platform that connects patients with healthcare providers. We aim to simplify the healthcare experience by offering seamless appointment booking, medical record management, and doctor consultations all in one place.
+            </p>
+            <p>
+                We believe that everyone deserves access to quality healthcare, and our platform is designed to make healthcare more accessible, efficient, and user-friendly for everyone.
+            </p>
+            
+            <h2 class="mb-4 mt-5">Our Story</h2>
+            <p>
+                CureNet was founded in 2023 by a team of healthcare professionals and technology experts who recognized the need for a better way to manage healthcare interactions. Frustrated by the fragmented nature of healthcare systems, they set out to create a unified platform that would streamline the entire healthcare experience.
+            </p>
+            <p>
+                Since our inception, we have partnered with numerous hospitals and healthcare providers to create a network that serves patients effectively. Our platform has helped thousands of patients find the right doctors, book appointments with ease, and manage their health records securely.
+            </p>
+            
+            <h2 class="mb-4 mt-5">Our Values</h2>
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-shield fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title">Patient Privacy</h5>
+                            <p class="card-text">We prioritize the confidentiality and security of your health information above all else.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-hands-helping fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title">Accessibility</h5>
+                            <p class="card-text">We're committed to making healthcare accessible to everyone, regardless of location or background.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-heart fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title">Compassion</h5>
+                            <p class="card-text">We approach healthcare with empathy and understanding of patients' needs and concerns.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-lightbulb fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title">Innovation</h5>
+                            <p class="card-text">We continuously evolve our platform to incorporate the latest advancements in healthcare technology.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   
+    <section class="mb-5">
+        <h2 class="text-center mb-4">Our Leadership Team</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle fa-5x mb-3 text-primary"></i>
+                        <h5 class="card-title">Dr. Sarah Johnson</h5>
+                        <p class="card-subtitle mb-2 text-muted">Founder & CEO</p>
+                        <p class="card-text">Former hospital administrator with over 15 years of experience in healthcare management.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle fa-5x mb-3 text-primary"></i>
+                        <h5 class="card-title">Michael Chen</h5>
+                        <p class="card-subtitle mb-2 text-muted">CTO</p>
+                        <p class="card-text">Tech innovator with extensive experience in developing healthcare solutions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle fa-5x mb-3 text-primary"></i>
+                        <h5 class="card-title">Dr. Robert Patel</h5>
+                        <p class="card-subtitle mb-2 text-muted">Medical Director</p>
+                        <p class="card-text">Practicing physician with a passion for improving patient care through technology.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+   
+    <section class="text-center mb-5 p-5 bg-light rounded">
+        <h2 class="mb-3">Join Our Healthcare Revolution</h2>
+        <p class="lead mb-4">Be part of our mission to transform healthcare management.</p>
+        <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Sign Up Today</a>
+    </section>
+</div>
+{% endblock %}

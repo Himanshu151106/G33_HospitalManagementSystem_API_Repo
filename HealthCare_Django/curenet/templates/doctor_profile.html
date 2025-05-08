@@ -1,0 +1,414 @@
+{% extends 'base.html' %}
+
+{% block title %}Dr. {{ doctor.name }} - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">Dr. {{ doctor.name }}</h1>
+        <p class="lead text-white">{{ doctor.specialty }} Specialist</p>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4 mb-md-0">
+                            <div class="mb-3">
+                                <i class="fas fa-user-md fa-6x text-primary"></i>
+                            </div>
+                            <div class="d-grid">
+                                <a href="{% url 'appointment_form' doctor.id %}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-calendar-check me-2"></i> Book Appointment
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h2 class="card-title mb-4">Dr. {{ doctor.name }}</h2>
+                            <div class="mb-3">
+                                <span class="badge bg-primary me-2">{{ doctor.specialty }}</span>
+                                <span class="badge bg-info">{{ doctor.experience }} Years Experience</span>
+                            </div>
+                            <p class="card-text"><strong>Hospital:</strong> {{ doctor.hospital.name }}</p>
+                            <p class="card-text"><strong>Location:</strong> {{ doctor.hospital.address }}, {{ doctor.hospital.city }}, {{ doctor.hospital.state }}</p>
+                            <p class="card-text"><strong>Consultation Fee:</strong> ₹{{ doctor.fees }}</p>
+                            <p class="card-text"><strong>Languages:</strong> English, Hindi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">About Dr. {{ doctor.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>Dr. {{ doctor.name }} is a highly qualified and experienced {{ doctor.specialty }} specialist with over {{ doctor.experience }} years of experience in the field. {{ doctor.name|slice:":1" }}e has been associated with {{ doctor.hospital.name }} for several years and has helped numerous patients with their health concerns.</p>
+                    <p>{{ doctor.name|slice:":1" }}e specializes in treating patients with various {{ doctor.specialty|lower }} conditions and is known for {{ doctor.name|slice:":1" }}is compassionate approach and detailed diagnosis. {{ doctor.name|slice:":1" }}e uses the latest treatment protocols and technologies to provide the best care for {{ doctor.name|slice:":1" }}is patients.</p>
+                    <p>{{ doctor.name|slice:":1" }}e completed {{ doctor.name|slice:":1" }}is medical education from a prestigious institution and has received specialized training in {{ doctor.specialty }}. {{ doctor.name|slice:":1" }}e regularly attends medical conferences and workshops to stay updated with the latest advancements in {{ doctor.name|slice:":1" }}is field.</p>
+                </div>
+            </div>
+            
+            
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Specializations</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% if doctor.specialty == 'Cardiology' %}
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-heartbeat fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Heart Diseases</h5>
+                                        <p class="mb-0 text-muted">Diagnosis and treatment of heart conditions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-heart fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Cardiac Surgery</h5>
+                                        <p class="mb-0 text-muted">Surgical procedures for heart problems</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-chart-line fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Hypertension</h5>
+                                        <p class="mb-0 text-muted">Management of high blood pressure</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file-medical-alt fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Cardiac Rehabilitation</h5>
+                                        <p class="mb-0 text-muted">Recovery programs after cardiac events</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elif doctor.specialty == 'Neurology' %}
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-brain fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Brain Disorders</h5>
+                                        <p class="mb-0 text-muted">Diagnosis and treatment of brain conditions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-bolt fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Epilepsy</h5>
+                                        <p class="mb-0 text-muted">Management of seizures and related disorders</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-head-side-virus fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Headaches</h5>
+                                        <p class="mb-0 text-muted">Treatment of chronic headaches and migraines</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-network-wired fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Movement Disorders</h5>
+                                        <p class="mb-0 text-muted">Treatment of Parkinson's and related conditions</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elif doctor.specialty == 'Orthopedics' %}
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-bone fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Bone Disorders</h5>
+                                        <p class="mb-0 text-muted">Treatment of bone fractures and disorders</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-walking fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Joint Replacement</h5>
+                                        <p class="mb-0 text-muted">Hip and knee replacement surgeries</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-child fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Sports Injuries</h5>
+                                        <p class="mb-0 text-muted">Treatment of sports-related injuries</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-spinner fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Arthritis</h5>
+                                        <p class="mb-0 text-muted">Management of different types of arthritis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-stethoscope fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">{{ doctor.specialty }} Care</h5>
+                                        <p class="mb-0 text-muted">Comprehensive {{ doctor.specialty|lower }} services</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-procedures fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Advanced Treatments</h5>
+                                        <p class="mb-0 text-muted">Latest therapies and procedures</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-md fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Consultations</h5>
+                                        <p class="mb-0 text-muted">Expert medical consultations</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-hospital-user fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-1">Patient Care</h5>
+                                        <p class="mb-0 text-muted">Personalized patient care services</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Education & Experience -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Education & Experience</h3>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">{{ doctor.hospital.name }}</h4>
+                                <p class="timeline-subtitle">{{ doctor.specialty }} Specialist | Present</p>
+                                <p>Currently practicing at {{ doctor.hospital.name }}, providing specialized {{ doctor.specialty|lower }} care to patients.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Previous Hospital</h4>
+                                <p class="timeline-subtitle">Senior Consultant | {{ 2025|add:"-4"|add:"-"|add:doctor.experience }} - {{ 2025|add:"-4" }}</p>
+                                <p>Worked as a Senior Consultant in the Department of {{ doctor.specialty }}, handling complex cases and mentoring junior doctors.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Medical Residency</h4>
+                                <p class="timeline-subtitle">{{ doctor.specialty }} | {{ 2025|add:"-6"|add:"-"|add:doctor.experience }} - {{ 2025|add:"-6" }}</p>
+                                <p>Completed residency in {{ doctor.specialty }} with distinction, gaining hands-on experience in patient care and specialized procedures.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Medical Degree</h4>
+                                <p class="timeline-subtitle">MBBS | {{ 2025|add:"-10"|add:"-"|add:doctor.experience }} - {{ 2025|add:"-10" }}</p>
+                                <p>Graduated with honors from a prestigious medical college, laying the foundation for a successful medical career.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+           
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h4 class="card-title mb-0">Book an Appointment</h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">To schedule an appointment with Dr. {{ doctor.name }}, click the button below.</p>
+                    <div class="d-grid">
+                        <a href="{% url 'appointment_form' doctor.id %}" class="btn btn-primary">
+                            <i class="fas fa-calendar-check me-2"></i> Book Now
+                        </a>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-2"><strong>Available Days:</strong></p>
+                        <div class="d-flex flex-wrap">
+                            <span class="badge bg-light text-dark me-2 mb-2 p-2">Monday</span>
+                            <span class="badge bg-light text-dark me-2 mb-2 p-2">Tuesday</span>
+                            <span class="badge bg-light text-dark me-2 mb-2 p-2">Wednesday</span>
+                            <span class="badge bg-light text-dark me-2 mb-2 p-2">Thursday</span>
+                            <span class="badge bg-light text-dark me-2 mb-2 p-2">Friday</span>
+                        </div>
+                        <p class="mb-2 mt-3"><strong>Consultation Fee:</strong> ₹{{ doctor.fees }}</p>
+                        <p class="mb-0"><strong>Duration:</strong> 30 minutes</p>
+                    </div>
+                </div>
+            </div>
+            
+          
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h4 class="card-title mb-0">Hospital Information</h4>
+                </div>
+                <div class="card-body">
+                    <h5>{{ doctor.hospital.name }}</h5>
+                    <p><i class="fas fa-map-marker-alt me-2 text-primary"></i> {{ doctor.hospital.address }}, {{ doctor.hospital.city }}, {{ doctor.hospital.state }}</p>
+                    <p><i class="fas fa-phone-alt me-2 text-primary"></i> +91 1234567890</p>
+                    <p><i class="fas fa-envelope me-2 text-primary"></i> info@{{ doctor.hospital.name|lower|slugify }}.com</p>
+                    <p><i class="fas fa-money-bill-wave me-2 text-primary"></i> Fee Range: {{ doctor.hospital.fees_range }}</p>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fas fa-map-marked-alt me-1"></i> View on Map
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-info-circle me-1"></i> Hospital Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h4 class="card-title mb-0">Patient Reviews</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h5 class="mb-0">Rahul Sharma</h5>
+                                <small class="text-muted">1 week ago</small>
+                            </div>
+                            <div>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                        </div>
+                        <p>Dr. {{ doctor.name }} is an excellent doctor! Very knowledgeable and takes time to explain everything in detail. Highly recommended.</p>
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h5 class="mb-0">Priya Patel</h5>
+                                <small class="text-muted">2 weeks ago</small>
+                            </div>
+                            <div>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="far fa-star text-warning"></i>
+                            </div>
+                        </div>
+                        <p>Great experience with Dr. {{ doctor.name }}. {{ doctor.name|slice:":1" }}e is very patient and caring. The treatment was effective and I feel much better now.</p>
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h5 class="mb-0">Amit Singh</h5>
+                                <small class="text-muted">1 month ago</small>
+                            </div>
+                            <div>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                            </div>
+                        </div>
+                        <p>Dr. {{ doctor.name }} is very professional and knowledgeable. {{ doctor.name|slice:":1" }}e explained everything clearly and answered all my questions. Would definitely recommend!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+  
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    .timeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 15px;
+        height: 100%;
+        width: 2px;
+        background-color: #e9ecef;
+    }
+    .timeline-item {
+        margin-bottom: 30px;
+        position: relative;
+    }
+    .timeline-marker {
+        position: absolute;
+        top: 5px;
+        left: -30px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+    .timeline-title {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+    .timeline-subtitle {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}

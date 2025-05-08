@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .payment-container {
+            max-width: 500px;
+            margin: 50px auto;
+        }
+        .card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .payment-option {
+            cursor: pointer;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+        .payment-option:hover {
+            background-color: #e9ecef;
+        }
+        .selected {
+            border-color: teal;
+            background-color: #e0f7fa;
+        }
+        .btn-teal {
+            background-color: #008080;
+            color: white;
+        }
+        .btn-teal:hover {
+            background-color: #006666;
+        }
+        .navbar-teal {
+            background-color: teal;
+        }
+        .navbar-brand-white {
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-teal fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand navbar-brand-white" href="#">CureNet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                 
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 80px;">
+        <div class="payment-container">
+            <div class="card">
+                <h3 class="text-center mb-3">Payment for Appointment</h3>
+
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('payment') }}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Select Payment Method</label>
+                        <div class="payment-option" onclick="selectPaymentMethod('credit-card')">
+                            <strong>Credit/Debit Card</strong>
+                        </div>
+                        <div class="payment-option" onclick="selectPaymentMethod('paypal')">
+                            <strong>PayPal</strong>
+                        </div>
+                        <div class="payment-option" onclick="selectPaymentMethod('bank-transfer')">
+                            <strong>Bank Transfer</strong>
+                        </div>
+                        <div class="payment-option" onclick="selectPaymentMethod('cash')">
+                            <strong>Cash on Meeting</strong>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="payment_method" id="payment_method" value="">
+
+                    <div id="credit-card-fields" class="payment-fields" style="display: none;">
+                        <div class="mb-3">
+                            <label for="card_number" class="form-label">Card Number</label>
+                            <input type="text" class="form-control" name="card_number" required pattern="\d{16}" title="Card number must be 16 digits">
+                        </div>
+                        <div class="mb-3">
+                            <label for="expiry" class="form-label">Expiry Date (MM/YY)</label>
+                            <input type="text" class="form-control" name="expiry" required pattern="(0[1-9]|1[0-2])\/\d{2}" title="Expiry date must be in MM/YY format">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" name="cvv" required pattern="\d{3}" title="CVV must be 3 digits">
+                        </div>
+                    </div>
+
+                    <div id="paypal-fields" class="payment-fields" style="display: none;">
+                        <p>You will be redirected to PayPal to complete your payment.</p>
+                    </div>
+
+                    <div id="bank-transfer-fields" class="payment-fields" style="display: none;">
+                        <p>Please transfer the amount to the following bank account:</p>
+                        <p><strong>Account Name:</strong> CureNet</p>
+                        <p><strong>Account Number:</strong> 123456789</p>
+                        <p><strong>Bank:</strong> Example Bank</p>
+                    </div>
+
+                    <div id="cash-fields" class="payment-fields" style="display: none;">
+                        <p>You have selected to pay in cash during your appointment. Please ensure you bring the exact amount.</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-teal w-100 mt-3">Pay & Confirm Appointment</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('book') }}" class="btn btn-teal text-decoration-none">Back to Appointment Form</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectPaymentMethod(method) {
+           
+            document.querySelectorAll('.payment-fields').forEach(function(field) {
+                field.style.display = 'none';
+            });
+
+            
+            document.querySelectorAll('.payment-option').forEach(function(option) {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+           
+            document.getElementById('payment_method').value = method;
+
+            if (method === 'credit-card') {
+                document.getElementById('credit-card-fields').style.display = 'block';
+            } else if (method === 'paypal') {
+                document.getElementById('paypal-fields').style.display = 'block';
+            } else if (method === 'bank-transfer') {
+                document.getElementById('bank-transfer-fields').style.display = 'block';
+            } else if (method === 'cash') {
+                document.getElementById('cash-fields').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">Account Settings</h1>
+        <p class="lead text-white">Manage your account preferences</p>
+    </div>
+</section>
+
+
+<div class="container">
+   
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+            <i class="fas fa-bars"></i> Menu
+        </button>
+        <div class="d-none d-md-block"></div>
+    </div>
+
+    <div class="row">
+       
+        <div class="col-md-3 mb-4">
+            <div class="collapse d-md-block" id="sidebar">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-user-circle fa-5x text-primary"></i>
+                            <h5 class="mt-2">{{ user.full_name }}</h5>
+                            <p class="text-muted">{{ user.email }}</p>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'patient_dashboard' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                            <a href="{% url 'my_appointments' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-calendar-check me-2"></i> {% if user.is_staff %} All Appointments{% else %} My Appointments{% endif %}
+                            </a>
+                            <a href="{% url 'medical_records' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-notes-medical me-2"></i> Medical Records
+                            </a>
+                            <a href="{% url 'profile' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-user me-2"></i> Profile
+                            </a>
+                            <a href="{% url 'settings' %}" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-cog me-2"></i> Settings
+                            </a>
+                            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger" onclick="return confirmLogout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="col-md-9">
+           
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Notification Settings</h3>
+                </div>
+                <div class="card-body">
+                    <form id="notificationForm">
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+                            </div>
+                            <div class="form-text">Receive notifications about appointments, medical records, and account updates via email.</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="smsNotifications" checked>
+                                <label class="form-check-label" for="smsNotifications">SMS Notifications</label>
+                            </div>
+                            <div class="form-text">Receive notifications about appointments and urgent updates via SMS.</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="appointmentReminders" checked>
+                                <label class="form-check-label" for="appointmentReminders">Appointment Reminders</label>
+                            </div>
+                            <div class="form-text">Receive reminders about upcoming appointments 24 hours in advance.</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="marketingEmails">
+                                <label class="form-check-label" for="marketingEmails">Marketing Emails</label>
+                            </div>
+                            <div class="form-text">Receive promotional emails about new services, health tips, and special offers.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </form>
+                </div>
+            </div>
+            
+            
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Privacy Settings</h3>
+                </div>
+                <div class="card-body">
+                    <form id="privacyForm">
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="shareWithDoctors" checked>
+                                <label class="form-check-label" for="shareWithDoctors">Share Medical Information with Doctors</label>
+                            </div>
+                            <div class="form-text">Allow doctors to view your medical records and appointment history.</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="shareWithHospitals" checked>
+                                <label class="form-check-label" for="shareWithHospitals">Share Information with Hospitals</label>
+                            </div>
+                            <div class="form-text">Allow hospitals to access your medical history and appointment details.</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="anonymousResearch">
+                                <label class="form-check-label" for="anonymousResearch">Contribute to Anonymous Research</label>
+                            </div>
+                            <div class="form-text">Allow anonymized medical data to be used for research purposes.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Privacy Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        
+        $('#notificationForm').submit(function(e) {
+            e.preventDefault();
+            alert('Notification preferences saved successfully!');
+        });
+
+      
+        $('#privacyForm').submit(function(e) {
+            e.preventDefault();
+            alert('Privacy settings saved successfully!');
+        });
+    });
+</script>
+{% endblock %}

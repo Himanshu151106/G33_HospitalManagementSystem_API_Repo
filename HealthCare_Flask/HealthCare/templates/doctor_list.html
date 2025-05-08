@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hospital_name }} - Doctor List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        #wrapper {
+            display: flex;
+        }
+        #sidebar-wrapper {
+            width: 270px;
+            height: 100vh;
+            position: fixed;
+            background: linear-gradient(135deg, #008080, #004d4d);
+            color: white;
+            padding-top: 20px;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-heading {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .list-group-item {
+            background-color: transparent;
+            color: white;
+            font-size: 1.1rem;
+            border: none;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .list-group-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        #page-content-wrapper {
+            margin-left: 270px;
+            padding: 30px;
+            width: calc(100% - 270px);
+        }
+        .custom-teal {
+            color: teal !important;
+        }
+        .btn-teal {
+            background-color: teal;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn-teal:hover {
+            background-color: #004d4d;
+        }
+        .card {
+            border: 2px solid teal;
+            border-radius: 15px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">Patient Dashboard</div>
+            <div class="list-group list-group-flush w-100">
+                <a href="{{url_for('patient')}}" class="list-group-item">Dashboard</a>
+                <a href="{{url_for('my_appointments')}}" class="list-group-item">My Appointments</a>
+                <a href="{{url_for('patient')}}" class="list-group-item">Medical Records</a>
+                <a href="{{url_for('patient')}}" class="list-group-item">My Doctors</a>
+                <a href="{{url_for('profile')}}" class="list-group-item">Profile</a>
+                <a href="{{url_for('settings')}}" class="list-group-item">Settings</a>
+                <a href="{{url_for('contact')}}" class="list-group-item">Help & Support</a>
+                <a href="{{url_for('about')}}" class="list-group-item">About Us</a>
+                <a href="#" onclick="confirmLogout()" class="list-group-item text-danger"><b>Logout</b></a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+            <div class="container mt-5">
+                <h2 class="text-center custom-teal">{{ hospital_name }} - Doctors</h2>
+                <div class="row mt-4">
+                    {% for doctor in doctors %}
+                    <div class="col-md-4">
+                        <div class="card p-3 mb-3 shadow">
+                            <h4 class="text-success">{{ doctor.name }}</h4>
+                            <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+                            <p><strong>Experience:</strong> {{ doctor.experience }} years</p>
+                            <p><strong>Fees:</strong> ₹{{ doctor.fees }}</p>
+                            <a href="{{ url_for('book', doctor_id=doctor.id) }}" class="btn btn-teal">Book Appointment</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+    </script>
+</body>
+</html>

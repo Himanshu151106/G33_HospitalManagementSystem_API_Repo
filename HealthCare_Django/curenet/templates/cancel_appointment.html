@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Cancel Appointment - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4">Cancel Appointment</h1>
+        <p class="lead">We're sorry to see you cancel your appointment</p>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Appointment Details</h3>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Patient Name:</strong> {{ appointment.name }}</p>
+                            <p><strong>Phone:</strong> {{ appointment.phone }}</p>
+                            <p><strong>Date:</strong> {{ appointment.date|date:"F d, Y" }}</p>
+                            <p><strong>Time:</strong> {{ appointment.time|time:"h:i A" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Doctor:</strong> {% if appointment.doctor %}Dr. {{ appointment.doctor.name }}{% else %}Not Assigned{% endif %}</p>
+                            <p><strong>Specialty:</strong> {% if appointment.doctor %}{{ appointment.doctor.specialty }}{% else %}N/A{% endif %}</p>
+                            <p><strong>Hospital:</strong> {% if appointment.hospital %}{{ appointment.hospital.name }}{% else %}Not Assigned{% endif %}</p>
+                            <p><strong>Payment Status:</strong> {% if appointment.is_paid %}<span class="badge bg-success">Paid</span>{% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">Cancellation Policy</h5>
+                        <p class="mb-0">Please note the following cancellation policy:</p>
+                        <ul>
+                            <li>Cancellations more than 24 hours before the appointment will receive a full refund (if applicable).</li>
+                            <li>Cancellations less than 24 hours before the appointment may be subject to a cancellation fee.</li>
+                            <li>No-shows without cancellation may result in the full fee being charged.</li>
+                        </ul>
+                        <p class="mb-0">If you have any questions about our cancellation policy, please contact our customer support.</p>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5>Are you sure you want to cancel this appointment?</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-flex mt-3">
+                                <button type="submit" class="btn btn-danger me-2">Yes, Cancel Appointment</button>
+                                <a href="{% url 'my_appointments' %}" class="btn btn-outline-secondary">No, Go Back</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+           
+            <div class="text-center mb-5">
+                <p>Would you prefer to reschedule your appointment instead?</p>
+                <a href="{% url 'reschedule_appointment' appointment.id %}" class="btn btn-primary">
+                    <i class="fas fa-calendar-alt me-2"></i> Reschedule Appointment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

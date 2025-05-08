@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Add/Edit Doctor - CureNet Admin{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-light py-4">
+    <div class="container">
+        <h1 class="display-5">{% if form.instance.id %}Edit{% else %}Add New{% endif %} Doctor</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'patient_dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'admin_doctor_list' %}">Doctors</a></li>
+                <li class="breadcrumb-item active">{% if form.instance.id %}Edit{% else %}Add{% endif %} Doctor</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Doctor Details</h3>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Doctor Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.specialty.id_for_label }}" class="form-label">Specialty</label>
+                            {{ form.specialty }}
+                            {% if form.specialty.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.specialty.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.experience.id_for_label }}" class="form-label">Years of Experience</label>
+                            {{ form.experience }}
+                            {% if form.experience.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.experience.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.fees.id_for_label }}" class="form-label">Consultation Fees (₹)</label>
+                            {{ form.fees }}
+                            {% if form.fees.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.fees.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.hospital.id_for_label }}" class="form-label">Hospital</label>
+                            {{ form.hospital }}
+                            {% if form.hospital.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.hospital.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'admin_doctor_list' %}" class="btn btn-outline-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> {% if form.instance.id %}Update{% else %}Save{% endif %} Doctor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

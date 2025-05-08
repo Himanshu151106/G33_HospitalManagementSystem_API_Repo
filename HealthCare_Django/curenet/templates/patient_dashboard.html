@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Dashboard - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">Dashboard</h1>
+        <h1 class="lead text-white">Welcome back, {{ user.full_name }}</h1>
+    </div>
+</section>
+
+
+<div class="container">
+   
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+            <i class="fas fa-bars"></i> Menu
+        </button>
+        <div class="d-none d-md-block"></div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-md-3 mb-4">
+            <div class="collapse d-md-block" id="sidebar">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-user-circle fa-5x text-primary"></i>
+                            <h5 class="mt-2">{{ user.full_name }}</h5>
+                            <p class="text-muted">{{ user.email }}</p>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'patient_dashboard' %}" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                            <a href="{% url 'my_appointments' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-calendar-check me-2"></i> {% if user.is_staff %} All Appointments{% else %} My Appointments{% endif %}
+                            </a>
+                            <a href="{% url 'medical_records' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-notes-medical me-2"></i> Medical Records
+                            </a>
+                            <a href="{% url 'profile' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-user me-2"></i> Profile
+                            </a>
+                            <a href="{% url 'settings' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-cog me-2"></i> Settings
+                            </a>
+                            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger" onclick="return confirmLogout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="col-md-9">
+            
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-primary text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Upcoming Appointments</h5>
+                                    <h2 class="mb-0">{{ upcoming_appointments|length }}</h2>
+                                </div>
+                                <i class="fas fa-calendar-alt fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{% url 'my_appointments' %}" class="text-white">View Details <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-success text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Past Appointments</h5>
+                                    <h2 class="mb-0">{{ past_appointments|length }}</h2>
+                                </div>
+                                <i class="fas fa-history fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{% url 'my_appointments' %}" class="text-white">View Details <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-info text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">Medical Records</h5>
+                                    <h2 class="mb-0">{{ medical_records|default:"0" }}</h2>
+                                </div>
+                                <i class="fas fa-file-medical-alt fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{% url 'medical_records' %}" class="text-white">View Details <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+
+            
+           
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">Upcoming Appointments</h3>
+                        <a href="{% url 'my_appointments' %}" class="btn btn-sm btn-outline-primary">
+                            View All <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_appointments %}
+                        {% for appointment in upcoming_appointments|slice:":3" %}
+                            <div class="card mb-3 border-{% if appointment.is_paid %}success{% else %}warning{% endif %}">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <h5 class="card-title">{{ appointment.name }}</h5>
+                                            <p class="card-text mb-1">
+                                                <i class="fas fa-calendar me-2 text-primary"></i> {{ appointment.date|date:"l, F d, Y" }}
+                                                <i class="fas fa-clock ms-3 me-2 text-primary"></i> {{ appointment.time|time:"h:i A" }}
+                                            </p>
+                                            <p class="card-text mb-1">
+                                                <i class="fas fa-user-md me-2 text-primary"></i> 
+                                                {% if appointment.doctor %}Dr. {{ appointment.doctor.name }} ({{ appointment.doctor.specialty }}){% else %}To be assigned{% endif %}
+                                            </p>
+                                            <p class="card-text mb-1">
+                                                <i class="fas fa-hospital me-2 text-primary"></i> 
+                                                {% if appointment.hospital %}{{ appointment.hospital.name }}{% else %}To be assigned{% endif %}
+                                            </p>
+                                            <p class="card-text">
+                                                <i class="fas fa-money-bill-wave me-2 text-primary"></i>
+                                                <span class="badge {% if appointment.is_paid %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                                                    {% if appointment.is_paid %}Paid{% else %}Payment Pending{% endif %}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-3 text-md-end">
+                                            <a href="{% url 'reschedule_appointment' appointment.id %}" class="btn btn-sm btn-outline-primary mb-2 d-block d-md-inline-block">
+                                                <i class="fas fa-calendar-alt me-1"></i> Reschedule
+                                            </a>
+                                            <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-sm btn-outline-danger d-block d-md-inline-block">
+                                                <i class="fas fa-times-circle me-1"></i> Cancel
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if upcoming_appointments|length > 3 %}
+                            <div class="text-center mt-3">
+                                <a href="{% url 'my_appointments' %}" class="btn btn-outline-primary">
+                                    View All Appointments <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">No upcoming appointments</h5>
+                            <p class="text-muted mb-4">You don't have any appointments scheduled in the future.</p>
+                            <a href="#hospitals" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-2"></i> Book an Appointment
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            
+            <div class="card mb-4" id="hospitals">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Hospitals</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for hospital in hospitals %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex mb-3">
+                                            <div class="flex-shrink-0 me-3">
+                                                <i class="fas fa-hospital fa-3x text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="card-title">{{ hospital.name }}</h4>
+                                                <p class="card-text mb-0">
+                                                    <i class="fas fa-map-marker-alt me-2 text-primary"></i> {{ hospital.city }}, {{ hospital.state }}
+                                                </p>
+                                                <p class="card-text mb-0">
+                                                    <i class="fas fa-money-bill-wave me-2 text-primary"></i> {{ hospital.fees_range }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <a href="{% url 'doctor_list' hospital.name %}" class="btn btn-outline-primary">
+                                                <i class="fas fa-user-md me-2"></i> View Doctors
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if user.is_staff %}
+                    <div class="mx-auto text-center mb-3">
+                        <a href="{% url 'dashboard_add_hospital' %}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i> Add Hospital
+                        </a>
+                    </div>
+                    {% endif %}
+            </div>
+            
+            
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">Health Tips</h3>
+                </div>
+                <div class="card-body">
+                    <div id="carouselHealthTips" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                                <i class="fas fa-heart fa-4x text-danger"></i>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <h4>Heart Health</h4>
+                                                <p class="mb-0">Regular exercise, a balanced diet, and stress management can significantly improve heart health. Aim for at least 30 minutes of moderate exercise most days of the week.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                                <i class="fas fa-brain fa-4x text-primary"></i>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <h4>Mental Wellness</h4>
+                                                <p class="mb-0">Prioritize mental health with regular mindfulness practices, adequate sleep, and social connections. Don't hesitate to reach out to a healthcare professional if you're struggling.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 text-center mb-3 mb-md-0">
+                                                <i class="fas fa-apple-alt fa-4x text-success"></i>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <h4>Nutrition</h4>
+                                                <p class="mb-0">Focus on a balanced diet rich in fruits, vegetables, whole grains, and lean proteins. Limit processed foods, added sugars, and excessive salt for optimal health.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselHealthTips" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-primary rounded-circle" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselHealthTips" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-primary rounded-circle" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

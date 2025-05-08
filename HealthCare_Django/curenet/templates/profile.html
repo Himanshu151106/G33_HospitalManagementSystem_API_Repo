@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - CureNet{% endblock %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 text-white">My Profile</h1>
+        <p class="lead text-white">Manage your personal information</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+            <i class="fas fa-bars"></i> Menu
+        </button>
+        <div class="d-none d-md-block"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="collapse d-md-block" id="sidebar">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-user-circle fa-5x text-primary"></i>
+                            <h5 class="mt-2">{{ user.full_name }}</h5>
+                            <p class="text-muted">{{ user.email }}</p>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'patient_dashboard' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                            <a href="{% url 'my_appointments' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-calendar-check me-2"></i> {% if user.is_staff %} All Appointments{% else %} My Appointments{% endif %}
+                            </a>
+                            <a href="{% url 'medical_records' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-notes-medical me-2"></i> Medical Records
+                            </a>
+                            <a href="{% url 'profile' %}" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-user me-2"></i> Profile
+                            </a>
+                            <a href="{% url 'settings' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-cog me-2"></i> Settings
+                            </a>
+                            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger" onclick="return confirmLogout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+            <!-- Personal Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">Personal Information</h3>
+                        <button class="btn btn-sm btn-primary" id="editProfileBtn">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="profileForm" method="post" action="{% url 'profile' %}">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="full_name" value="{{ user.full_name }}" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                            </div>
+                        </div>
+
+                        {# Render additional profile_form fields manually, excluding date_of_birth #}
+                        <div class="row mb-3">
+                            {% for field in profile_form %}
+                                {% if field.name != 'date_of_birth' %}
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex justify-content-end" id="profileBtns" style="display: none !important;">
+                            <button type="button" class="btn btn-secondary me-2" id="cancelProfileBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Health Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">Health Information</h3>
+                        <button class="btn btn-sm btn-primary" id="editHealthBtn">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="healthForm" method="post" action="{% url 'profile' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="health">
+                        <div class="row mb-3">
+                            {% for field in health_form %}
+                                {% if field.name != 'date_of_birth' %}
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger">{{ field.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex justify-content-end" id="healthBtns" style="display: none !important;">
+                            <button type="button" class="btn btn-secondary me-2" id="cancelHealthBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('#editProfileBtn').click(function() {
+            $('#profileForm input:not([name="email"]), #profileForm select, #profileForm textarea').prop('disabled', false);
+            $('#profileBtns').css('display', 'flex');
+            $(this).hide();
+        });
+
+        $('#cancelProfileBtn').click(function() {
+            $('#profileForm input, #profileForm select, #profileForm textarea').prop('disabled', true);
+            $('#profileBtns').css('display', 'none');
+            $('#editProfileBtn').show();
+        });
+
+        $('#editHealthBtn').click(function() {
+            $('#healthForm input, #healthForm textarea').prop('disabled', false);
+            $('#healthBtns').css('display', 'flex');
+            $(this).hide();
+        });
+
+        $('#cancelHealthBtn').click(function() {
+            $('#healthForm input, #healthForm textarea').prop('disabled', true);
+            $('#healthBtns').css('display', 'none');
+            $('#editHealthBtn').show();
+        });
+    });
+</script>
+{% endblock %}
